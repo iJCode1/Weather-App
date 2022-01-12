@@ -85,3 +85,62 @@ i2;
 //En caso no se cumpla la busqueda, devolvera un -1
 const i3 = nom.findIndex((ele)=> ele >= 80);
 i3;
+
+
+
+
+//Creando otro arreglo
+const arreglo2 = [12, {name: "Juanito", age: 20}, "Joel", 17, true, [1,2,3]]
+arreglo2; //[ 12, { name: 'Juanito', age: 20 }, 'Joel', 17, true, [ 1, 2, 3 ] ]
+
+
+//Iterando los indices de un arreglo con for-in
+for(index in arreglo2){
+  console.log(index); //0, 1, 2, 3, 4, 5
+  console.log(arreglo2[index]); //12, { name: 'Juanito', age: 20 }, Joel, 17, true, [ 1, 2, 3 ]
+}
+
+
+//Iterando los valores de un arreglo con for-of
+for(value of arreglo2){
+  console.log(value); //12, { name: 'Juanito', age: 20 }, Joel, 17, true, [ 1, 2, 3 ]
+}
+
+//Obteniendo longitud de arreglo
+console.log(arreglo2.length); //6
+
+//Iterando los valores de un arreglo con for
+for(let i = 0; i <= arreglo2.length - 1; i = i+1){
+  console.log(arreglo2[i]); //12, { name: 'Juanito', age: 20 }, Joel, 17, true, [ 1, 2, 3 ]
+}
+
+//Un for puede ser combinado con una cndicional para ser detenido en algún momento que se cumpla una determinada condición por ejemplo
+for(let i = 0; i <= arreglo2.length - 1; i = i+1){
+  console.log(arreglo2[i]); //12, { name: 'Juanito', age: 20 }, Joel, 17
+  if (i == 3){
+    break; //El break indica que el bucle se detiene y termina su ejecución
+  }
+}
+
+
+
+//Iterando los valores de un arreglo con while
+/*
+  Al trabajar con while o do-whiñe es necesario apoyarse de un contador (similar que en for) 
+  e incrementarlo o decrementarlo según sea el caso para no entrar en un loop infinito
+*/
+let count = 0;
+while(count <= arreglo2.length - 1){
+  console.log(arreglo2[count]); //12, { name: 'Juanito', age: 20 }, Joel, 17, true, [ 1, 2, 3 ]
+  count = count + 1; //Importante incrementar o decrementar el contenedor según sea el caso ya que si no, se entra en un bucle infinito
+}
+
+
+
+//Iterando los valores de un arreglo con do-while
+let count2 = 0;
+do{
+  console.log(arreglo2[count2]); //12, { name: 'Juanito', age: 20 }, Joel, 17, true, [ 1, 2, 3 ]
+  console.log(typeof(arreglo2[count2])); //number, object, string, number, boolean, object
+  count2 = count2 + 1;
+}while(count2 <= arreglo2.length - 1);

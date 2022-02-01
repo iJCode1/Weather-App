@@ -19,6 +19,20 @@ function setCurrentTemp($elemento, temp){
   const formattedTemp = formatTemp(temp);
   $elemento.textContent = formattedTemp;
 }
+function solarStatus(sunriseTime, sunsetTime){
+  const currentHours = new Date().getHours();
+  const sunriseHours = sunriseTime.getHours();
+  const sunsetHours = sunsetTime.getHours();
+  if(currentHours > sunsetHours || currentHours < sunriseHours){
+    console.log("night");
+    return "night";
+  }
+  console.log("morning");
+  return "morning";
+}
+function setBackground($elemento, solarStatus){
+  $elemento.style.backgroundImage = `url("../images/${solarStatus}-drizzle.jpg")`;
+}
 function configCurrentWeather(weather){
   //loader
   //date
@@ -33,6 +47,11 @@ function configCurrentWeather(weather){
   const temp = weather.main.temp;
   setCurrentTemp($currentWeatherTemp, temp);
   //background
+    //Convirtiendo horas de segundos a milisegundos '*1000'
+  const sunriseTime = new Date(weather.sys.sunrise * 1000);
+  const sunsetTime = new Date(weather.sys.sunset * 1000);
+  const $app = document.querySelector("#app");
+  setBackground($app, solarStatus(sunriseTime, sunsetTime));
 }
 
 export default function currentWeather(){

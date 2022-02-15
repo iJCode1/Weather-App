@@ -1,6 +1,6 @@
 import weather from '../data/current-weather.js';
-import {formatDate} from './utils/format-data.js';
-import {formatTemp} from './utils/format-data.js';
+import {formatDate, formatTemp} from './utils/format-data.js';
+import {weatherConditionsCodes} from './constant.js';
 
 function setCurrentCity($elemento, city){
   $elemento.textContent = city;
@@ -24,14 +24,15 @@ function solarStatus(sunriseTime, sunsetTime){
   const sunriseHours = sunriseTime.getHours();
   const sunsetHours = sunsetTime.getHours();
   if(currentHours > sunsetHours || currentHours < sunriseHours){
-    console.log("night");
+    // console.log("night");
     return "night";
   }
-  console.log("morning");
+  // console.log("morning");
   return "morning";
 }
-function setBackground($elemento, solarStatus){
-  $elemento.style.backgroundImage = `url("../images/${solarStatus}-drizzle.jpg")`;
+function setBackground($elemento, conditionCode, solarStatus){
+  const weatherType = weatherConditionsCodes[conditionCode];
+  $elemento.style.backgroundImage = `url("../images/${solarStatus}-${weatherType}.jpg")`;
 }
 function configCurrentWeather(weather){
   //loader
@@ -51,7 +52,8 @@ function configCurrentWeather(weather){
   const sunriseTime = new Date(weather.sys.sunrise * 1000);
   const sunsetTime = new Date(weather.sys.sunset * 1000);
   const $app = document.querySelector("#app");
-  setBackground($app, solarStatus(sunriseTime, sunsetTime));
+  const conditionCode = String(weather.weather[0].id).charAt(0);
+  setBackground($app, conditionCode, solarStatus(sunriseTime, sunsetTime));
 }
 
 export default function currentWeather(){

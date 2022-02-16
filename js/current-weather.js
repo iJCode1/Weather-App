@@ -1,7 +1,7 @@
 import weather from '../data/current-weather.js';
 import {formatDate, formatTemp} from './utils/format-data.js';
 import {weatherConditionsCodes} from './constant.js';
-import {getCurrentPosition} from './geolocation.js';
+import {getLanLon} from './geolocation.js';
 
 function setCurrentCity($elemento, city){
   $elemento.textContent = city;
@@ -59,16 +59,21 @@ function configCurrentWeather(weather){
   setBackground($app, conditionCode, solarStatus(sunriseTime, sunsetTime));
 }
 
-export default function currentWeather(){
+export default async function currentWeather(){
   //Geo //API - weather // Config
-  // const latlon = getCurrentPosition();
-  getCurrentPosition()
-  .then((datos)=>{
-    console.log("los datos", datos);
-  })
-  .catch((message)=>{
-    console.log(message);
-  });
+  //Recibiendo los valores por función asincrona
+  const {lat, lon, isError} = await getLanLon();
+  if(isError) return console.log("Ha ocurrido un error ubicandote");
+  console.log(lat, lon);
+
+  //Recibiendo los valores por promesa
+  // getCurrentPosition()
+  // .then((datos)=>{
+  //   console.log("los datos", datos);
+  // })
+  // .catch((message)=>{
+  //   console.log(message);
+  // });
   configCurrentWeather(weather);
-  console.log(weather);
+  // console.log(weather);
 }

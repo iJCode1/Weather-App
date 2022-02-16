@@ -35,7 +35,7 @@ function setBackground($elemento, conditionCode, solarStatus){
   const weatherType = weatherConditionsCodes[conditionCode];
   const size = window.matchMedia("(-webkit-min-device-pixel-ratio: 2)").matches;
   const resolution = size ? "@2x" : "";
-  $elemento.style.backgroundImage = `url("./images/${solarStatus}-${weatherType}${resolution}.jpg")`;
+  $elemento.style.backgroundImage = `url("../images/${solarStatus}-${weatherType}${resolution}.jpg")`;
 }
 function configCurrentWeather(weather){
   //loader
@@ -61,7 +61,14 @@ function configCurrentWeather(weather){
 
 export default function currentWeather(){
   //Geo //API - weather // Config
-  getCurrentPosition();
+  // const latlon = getCurrentPosition();
+  getCurrentPosition()
+  .then((datos)=>{
+    console.log("los datos", datos);
+  })
+  .catch((message)=>{
+    console.log(message);
+  });
   configCurrentWeather(weather);
   console.log(weather);
 }

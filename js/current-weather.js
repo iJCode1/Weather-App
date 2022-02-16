@@ -1,7 +1,8 @@
-import weather from '../data/current-weather.js';
+// import weather from '../data/current-weather.js';
 import {formatDate, formatTemp} from './utils/format-data.js';
 import {weatherConditionsCodes} from './constant.js';
 import {getLanLon} from './geolocation.js';
+import {getCurrentWeather} from './services/weather.js';
 
 function setCurrentCity($elemento, city){
   $elemento.textContent = city;
@@ -35,7 +36,7 @@ function setBackground($elemento, conditionCode, solarStatus){
   const weatherType = weatherConditionsCodes[conditionCode];
   const size = window.matchMedia("(-webkit-min-device-pixel-ratio: 2)").matches;
   const resolution = size ? "@2x" : "";
-  $elemento.style.backgroundImage = `url("../images/${solarStatus}-${weatherType}${resolution}.jpg")`;
+  $elemento.style.backgroundImage = `url("./images/${solarStatus}-${weatherType}${resolution}.jpg")`;
 }
 function configCurrentWeather(weather){
   //loader
@@ -63,8 +64,8 @@ export default async function currentWeather(){
   //Geo //API - weather // Config
   //Recibiendo los valores por función asincrona
   const {lat, lon, isError} = await getLanLon();
-  if(isError) return console.log("Ha ocurrido un error ubicandote");
-  console.log(lat, lon);
+  if(isError) return console.log("A ocurrido un error ubicandote");
+  // console.log(lat, lon);
 
   //Recibiendo los valores por promesa
   // getCurrentPosition()
@@ -74,6 +75,8 @@ export default async function currentWeather(){
   // .catch((message)=>{
   //   console.log(message);
   // });
+  const {isError: currentWeatherError, data:weather} = await getCurrentWeather(lat, lon);
+  if(currentWeatherError) return console.log('oh! A ocurrido un error trayendo los datos del cliente')
   configCurrentWeather(weather);
   // console.log(weather);
 }

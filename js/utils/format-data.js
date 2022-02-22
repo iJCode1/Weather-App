@@ -9,3 +9,15 @@ export function formatDate(date, options = defaultDateOptions){
 export function formatTemp(temp){
   return `${Math.floor(temp)}°`
 }
+export function formatWeekList(rawData){
+  let dayList = [];
+  const weekList = [];
+  rawData.forEach((item, index)=>{
+    dayList.push(item);
+    if((index + 1) %8 === 0){
+      weekList.push(dayList);
+      dayList = [];
+    }
+  });
+  return weekList;
+}

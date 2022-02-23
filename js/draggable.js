@@ -8,6 +8,7 @@ export default function draggable($element, config = defaultConfig){
     return console.warn(`Elemento invalido, se esperabá un HTMLElement y se recibió ${$element}`);
   }
   let isOpen = config.open;
+  let isDragging = false;
   const elementRect = $element.getBoundingClientRect();
   const ELEMENT_BLOCK_SIZE = elementRect.height;
   
@@ -19,6 +20,42 @@ export default function draggable($element, config = defaultConfig){
   let widgetPosition = VISIBLE_Y_POSITION;
   
   isOpen ? open() : close();
+
+  $marker.addEventListener('click', handleClick);
+  $marker.addEventListener('pointerdown', handlePointerDown);
+  $marker.addEventListener('pointerup', handlePointerUp);
+  $marker.addEventListener('pointerout', handlePointerOut);
+  $marker.addEventListener('pointercancel', handlePointerCancel);
+  $marker.addEventListener('pointermove', handlePointerMove);
+
+  function handlePointerDown(){
+    logger('POINTER DOWN');
+  }
+  function handlePointerUp(){
+    logger('POINTER UP');
+  }
+  function handlePointerOut(){
+    logger('POINTER OUT');
+  }
+  function handlePointerCancel(){
+    logger('POINTER CANCEL');
+  }
+  function handlePointerMove(){
+    logger('POINTER MOVE');
+  }
+  function handleClick(event){
+    logger('CLICK');
+    toggle();
+  }
+
+  function toggle(){
+    if(!isDragging){
+      if(!isOpen){
+        return open();
+      }
+      return close();
+    }
+  }
 
   function logger(message){
     if(config.debug){

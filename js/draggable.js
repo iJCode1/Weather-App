@@ -20,6 +20,7 @@ export default function draggable($element, config = defaultConfig){
   let widgetPosition = VISIBLE_Y_POSITION;
   
   isOpen ? open() : close();
+  let startY = 0;
 
   $marker.addEventListener('click', handleClick);
   $marker.addEventListener('pointerdown', handlePointerDown);
@@ -27,25 +28,57 @@ export default function draggable($element, config = defaultConfig){
   $marker.addEventListener('pointerout', handlePointerOut);
   $marker.addEventListener('pointercancel', handlePointerCancel);
   $marker.addEventListener('pointermove', handlePointerMove);
-
-  function handlePointerDown(){
-    logger('POINTER DOWN');
+  if(config.animatable){
+    setAnimations();
   }
+
   function handlePointerUp(){
     logger('POINTER UP');
+    dragEnd();
   }
   function handlePointerOut(){
     logger('POINTER OUT');
+    dragEnd();
   }
   function handlePointerCancel(){
     logger('POINTER CANCEL');
+    dragEnd();
   }
-  function handlePointerMove(){
-    logger('POINTER MOVE');
+  function handlePointerDown(event){
+    logger('POINTER DOWN');
+    startDrag(event);
   }
   function handleClick(event){
     logger('CLICK');
     toggle();
+  }
+  function handlePointerMove(event){
+    logger('POINTER MOVE');
+    drag(event);
+  }
+  
+  function pageY(event){
+    return event.pageY || event.touches[0].pageY;
+  }
+
+  function startDrag(event){
+    isDragging = true;
+    startY = pageY(event);
+  }
+
+  function setAnimations($elemento){
+    $element.style.transition = 'margin-bottom .3s';
+  }
+  function bounce(){
+    if(widgetPosition < ELEMENT_BLOCK_SIZE / 2){
+      return open();
+    }
+    return close();
+  }
+  function dragEnd(){
+    logger('DRAG END');
+    isDragging = false;
+    bounce();
   }
 
   function toggle(){
@@ -78,5 +111,16 @@ export default function draggable($element, config = defaultConfig){
 
   function setWidgetPosition(value){
     $element.style.marginBottom = `-${value}px`;
+  }
+
+  function drag(event){
+    const cursorY = pageY(event);
+    const movementY = cursorY - startY;
+    widgetPosition = widgetPosition + movementY;
+    startY = cursorY;
+    if(widgetPosition > HIDDEN_Y_POSITION){
+      return false;
+    }
+    setWidgetPosition(widgetPosition);
   }
 }
